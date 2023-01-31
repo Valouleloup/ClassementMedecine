@@ -1,0 +1,105 @@
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <title>Classement médian par CHU</title>
+</head>
+<body>
+  <figure class="highcharts-figure">
+    <div id="container"></div>
+    <p class="highcharts-description">
+        Classement médian des étudiants ayant été affectés à un CHU suite aux épreuves classantes nationales.
+    </p>
+</figure>
+
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/series-label.js"></script>
+    
+    <script type="text/javascript" src="stats-highcharts.js"></script>
+    <script type="text/javascript">
+
+        var chus = statsHighcharts['city'];
+
+        var highlightedChu = ['Lyon', 'Rennes', 'Montpellier', 'Bordeaux', 'Toulouse', 'Paris', 'Marseille', 'Lille', 'Tours', 'Nancy', 'Saint-Etienne', 'Poitiers', 'Amiens'];
+
+        var dataStats = [];
+
+        for (const chu of chus) {
+            var visibleChu = false;
+            if(highlightedChu.includes(chu.name)) {
+                visibleChu = true;
+            }
+            dataStats.push({name:chu.name, data:[chu['2020']['mediane'], chu['2021']['mediane'], chu['2022']['mediane']], visible: visibleChu});
+        }
+
+        Highcharts.chart('container', {
+
+            chart: {
+                height:800,
+                width:800
+            },
+
+            title: {
+                text: 'Classement médian par CHU',
+                align: 'left'
+            },
+
+            subtitle: {
+                text: 'Source: <a href="https://www.legifrance.gouv.fr" target="_blank">Legifrance</a>',
+                align: 'left'
+            },
+
+            yAxis: {
+                title: {
+                    text: 'Classement médian'
+                },
+                max:7000,
+                min:2000,
+                reversed: true
+            },
+
+            xAxis: {
+                minTickInterval:1
+            },
+
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle'
+            },
+
+            plotOptions: {
+                series: {
+                    label: {
+                        connectorAllowed: false
+                    },
+                    pointStart: 2020,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            lineWidth: 5
+                        }
+                    }
+                }
+            },
+
+            series: dataStats,
+
+            responsive: {
+                rules: [{
+                    condition: {
+                        maxWidth: 500
+                    },
+                    chartOptions: {
+                        legend: {
+                            layout: 'horizontal',
+                            align: 'center',
+                            verticalAlign: 'bottom'
+                        }
+                    }
+                }]
+            }
+
+        });
+    </script>
+</body>
+</html>
